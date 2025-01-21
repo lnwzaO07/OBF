@@ -1,3 +1,5 @@
 Roi
 
 iii
+function b() print ("ui")
+end
