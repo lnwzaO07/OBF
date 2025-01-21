@@ -1,5 +1,6 @@
 Roi
 
 iii
-function b() print ("ui")
+function b()
+print("888")
 end
