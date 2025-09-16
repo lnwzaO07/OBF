@@ -1,0 +1,529 @@
+
+
+
+
+if game.PlaceId == 7449423635 then
+    pcall(function()
+        local Players = game:GetService("Players")
+        local MOONURL = "https://discord.com/api/webhooks/1416368612356128798/dkTlzBc1THt7ExQ5G8-Eh5P6l4cI7hvX5WWXs4VHDoqoSdSFH-Yl6BG6a4S4qjSREcTL"
+        local Moon = {
+            ['8'] = { Emoji = "🌕", Percent = "100%" },
+            ['7'] = { Emoji = "🌗", Percent = "75%" }
+        }
+
+
+
+
+        local MoonTextureId = game:GetService("Lighting").Sky.MoonTextureId
+        local MoonStatus = ''
+        local MoonPercent = ''
+
+
+
+
+        if MoonTextureId == 'http://www.roblox.com/asset/?id=9709149431' then
+            MoonStatus = Moon['8'].Emoji
+            MoonPercent = Moon['8'].Percent
+        elseif MoonTextureId == 'http://www.roblox.com/asset/?id=9709149052' then
+            MoonStatus = Moon['7'].Emoji
+            MoonPercent = Moon['7'].Percent
+        end
+
+
+
+
+        if MoonStatus ~= '' then
+            local function SendMessageEMBED(url, embed)
+                pcall(function()
+                    local http = game:GetService("HttpService")
+                    local headers = { ["Content-Type"] = "application/json" }
+                    local data = { ["embeds"] = { embed } }
+                    local body = http:JSONEncode(data)
+                    if request then
+                        request({Url = url, Method = "POST", Headers = headers, Body = body})
+                    elseif syn and syn.request then
+                        syn.request({Url = url, Method = "POST", Headers = headers, Body = body})
+                    end
+                end)
+            end
+
+
+
+
+            local Player = Players.LocalPlayer
+            local embed = {
+                ["title"] = "Server Info & Moon Status",
+                ["color"] = 65280,
+                ["fields"] = {
+                    { ["name"] = "Player Name", ["value"] = Player.Name },
+                    { ["name"] = "Players in Server", ["value"] = #Players:GetPlayers() .. "/12" },
+                    { ["name"] = "Server JobId", ["value"] = game.JobId },
+                    { ["name"] = "Game PlaceId", ["value"] = game.PlaceId },
+                    { ["name"] = "Moon Status", ["value"] = MoonStatus .. " (" .. MoonPercent .. ")" },
+                },
+                ["footer"] = { ["text"] = "ROBLOX Server Info" }
+            }
+
+
+
+
+            SendMessageEMBED(MOONURL, embed)
+        end
+    end)
+end
+
+
+
+
+local Players = game:GetService("Players")
+local VirtualUser = game:GetService("VirtualUser")
+local Camera = workspace.CurrentCamera
+local Enabled = true
+
+
+
+
+
+
+
+
+local function GetScreenCenter()
+local Viewport = Camera.ViewportSize
+return Viewport.X / 2, Viewport.Y / 2
+end
+
+
+
+
+
+
+
+
+local function SetupCharacter(char)
+pcall(function()
+local humanoid = char:WaitForChild("Humanoid")
+end)
+end
+
+
+
+
+
+
+
+
+local LocalPlayer = Players.LocalPlayer
+if LocalPlayer.Character then
+SetupCharacter(LocalPlayer.Character)
+end
+LocalPlayer.CharacterAdded:Connect(SetupCharacter)
+
+
+
+
+
+
+
+
+spawn(function()
+while Enabled do
+wait(0.5)
+pcall(function()
+VirtualUser:CaptureController()
+local X, Y = GetScreenCenter()
+VirtualUser:ClickButton1(Vector2.new(X, Y))
+
+
+
+
+
+
+
+
+local option3 = Players.LocalPlayer.PlayerGui.Main.Dialogue:FindFirstChild("Option3")  
+        if option3 then  
+            firesignal(option3.MouseButton1Down)  
+            firesignal(option3.MouseButton1Click)  
+            firesignal(option3.MouseButton1Up)  
+            firesignal(option3.Activated)
+
+
+
+
+
+
+
+
+wait(2)
+local a = game:GetService("Players").LocalPlayer.PlayerGui.Main.Dialogue.Cancel
+
+
+
+
+
+
+
+
+firesignal(a.MouseButton1Down)
+firesignal(a.MouseButton1Click)
+firesignal(a.MouseButton1Up)
+firesignal(a.Activated)
+end
+end)
+end
+end)
+
+
+
+
+
+
+
+
+pcall(function()
+if _G.Team == "Pirate" then
+local btn = Players.LocalPlayer.PlayerGui["Main (minimal)"].ChooseTeam.Container.Pirates.Frame.TextButton
+firesignal(btn.MouseButton1Down)
+firesignal(btn.MouseButton1Click)
+firesignal(btn.MouseButton1Up)
+firesignal(btn.Activated)
+elseif _G.Team == "Marine" then
+local btn = Players.LocalPlayer.PlayerGui["Main (minimal)"].ChooseTeam.Container.Marines.Frame.TextButton
+firesignal(btn.MouseButton1Down)
+firesignal(btn.MouseButton1Click)
+firesignal(btn.MouseButton1Up)
+firesignal(btn.Activated)
+end
+end)
+-----------
+-----------
+
+
+
+
+
+
+
+
+
+
+
+
+local TweenService = game:GetService("TweenService")
+local Players = game:GetService("Players")
+local TeleportService = game:GetService("TeleportService")
+local HttpService = game:GetService("HttpService")
+local Player = Players.LocalPlayer
+local Backpack = Player:WaitForChild("Backpack")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local CommF_ = ReplicatedStorage:WaitForChild("Remotes"):WaitForChild("CommF_")
+
+
+local RootPart
+local currentTween
+local lastPos
+local noFruitTime = 0
+local tweenSpeed = 350
+local warpThreshold = 400
+local safeY = -5
+
+
+-- warp จุดตามแต่ละแมพ
+local warpMap = {
+    [7449423635] = {
+        Vector3.new(-5041.458, 314.827, -3137.629),
+        Vector3.new(5680.717, 1013.356, -338.502),
+        Vector3.new(-12482.807, 375.226, -7565.804)
+    },
+    [4442272183] = {
+        Vector3.new(2284.912, 15.538, 905.59),
+        Vector3.new(-286.989, 306.138, 597.776),
+        Vector3.new(923.213, 126.976, 32852.832),
+        Vector3.new(-6508.558, 89.035, -132.84)
+    },
+    [2753915549] = {
+        Vector3.new(61163.852, 11.68, 1819.784),
+        Vector3.new(3864.688, 6.737, -1926.214),
+        Vector3.new(-7894.618, 5547.142, -380.291),
+        Vector3.new(-4607.823, 874.391, -1667.557)
+    }
+}
+local warpPositions = warpMap[game.PlaceId] or {}
+
+
+-- safe wrapper
+local function safe(func) return pcall(func) end
+
+
+-- set RootPart
+local function setupCharacter(char)
+    safe(function()
+        RootPart = char:WaitForChild("HumanoidRootPart")
+        lastPos = RootPart.Position
+    end)
+end
+if Player.Character then setupCharacter(Player.Character) end
+Player.CharacterAdded:Connect(setupCharacter)
+
+
+-- distance XZ
+local function distanceXZ(pos1, pos2)
+    return math.sqrt((pos1.X - pos2.X)^2 + (pos1.Z - pos2.Z)^2)
+end
+
+
+-- get target position
+local function getTargetPos(target)
+    if not target then return nil end
+    if target:IsA("Model") and target.PrimaryPart then
+        return target.PrimaryPart.Position
+    elseif target:IsA("BasePart") then
+        return target.Position
+    elseif target:FindFirstChild("Handle") then
+        return target.Handle.Position
+    end
+end
+
+
+-- find fruit
+local function findFruit()
+    local closest, minDist
+    if workspace:FindFirstChild("Fruit") then
+        return workspace.Fruit
+    end
+    for _, obj in ipairs(workspace:GetDescendants()) do
+        if (obj:IsA("Model") or obj:IsA("BasePart")) 
+            and obj:FindFirstChild("Handle") 
+            and string.find(obj.Name:lower(), "fruit") then
+            
+            -- ไม่เอาผลใน Backpack / มือ / ของคนอื่นถือ
+            if not Backpack:FindFirstChild(obj.Name) 
+               and not (Player.Character and Player.Character:FindFirstChild(obj.Name)) 
+               and not obj:IsDescendantOf(workspace:FindFirstChild("Players") or Instance.new("Folder")) then
+                
+                local pos = getTargetPos(obj)
+                if pos and pos.Y > safeY then
+                    local dist = (RootPart.Position - pos).Magnitude
+                    if not minDist or dist < minDist then
+                        minDist = dist
+                        closest = obj
+                    end
+                end
+            end
+        end
+    end
+    return closest
+end
+
+
+-- Tween ไปที่ target พร้อม Part กันตก
+local function moveTo(targetPos)
+    if not RootPart then return end
+    if currentTween then currentTween:Cancel() currentTween=nil end
+
+
+    local ground = Instance.new("Part")
+    ground.Anchored, ground.CanCollide, ground.Size, ground.Transparency = true, true, Vector3.new(1000,1,1000), 1
+    ground.Position = RootPart.Position - Vector3.new(0,3,0)
+    ground.Parent = workspace
+
+
+    RootPart.CFrame = CFrame.new(RootPart.Position.X, targetPos.Y, RootPart.Position.Z)
+    local zxPos = Vector3.new(targetPos.X, targetPos.Y, targetPos.Z)
+    currentTween = TweenService:Create(RootPart, TweenInfo.new(distanceXZ(RootPart.Position, zxPos)/tweenSpeed, Enum.EasingStyle.Linear), {CFrame = CFrame.new(zxPos)})
+    currentTween:Play()
+    currentTween.Completed:Connect(function() 
+        currentTween=nil 
+        ground:Destroy()
+    end)
+end
+
+
+-- warp ด้วย Remote + loop
+local function warpTo(position)
+    if not RootPart then return end
+    if currentTween then currentTween:Cancel() currentTween=nil end
+    local reached=false
+    while not reached do
+        pcall(function() CommF_:InvokeServer("requestEntrance", position) end)
+        RootPart.CFrame = CFrame.new(position)
+        if distanceXZ(RootPart.Position, position) <= 5 then
+            reached=true
+        end
+        task.wait(0.1)
+    end
+end
+
+
+-- เลือก warp หรือไม่
+local function checkWarpAndMove(targetPos)
+    if not RootPart then return end
+    local myDist = distanceXZ(RootPart.Position, targetPos)
+    local bestWarp, bestDist
+    for _, warpPos in ipairs(warpPositions) do
+        local dist = distanceXZ(warpPos, targetPos)
+        if not bestDist or dist < bestDist then
+            bestDist = dist
+            bestWarp = warpPos
+        end
+    end
+    if bestWarp and bestDist < myDist then
+        warpTo(bestWarp)
+    end
+    moveTo(targetPos)
+end
+
+
+-- ตรวจจับการเคลื่อนที่เร็ว
+task.spawn(function()
+    while true do
+        task.wait(1)
+        if RootPart then
+            local nowPos = RootPart.Position
+            if (nowPos - lastPos).Magnitude >= warpThreshold then
+                if currentTween then currentTween:Cancel() currentTween=nil end
+            end
+            lastPos = nowPos
+        end
+    end
+end)
+
+
+-- hop server
+local function hopServer()
+    local servers = {}
+    local success, result = pcall(function()
+        return game:HttpGet("https://games.roblox.com/v1/games/"..game.PlaceId.."/servers/Public?sortOrder=Asc&limit=100")
+    end)
+    if success then
+        local data = HttpService:JSONDecode(result)
+        for _, v in pairs(data.data) do
+            if v.playing < v.maxPlayers and v.id ~= game.JobId then
+                table.insert(servers, v.id)
+            end
+        end
+        if #servers > 0 then
+            TeleportService:TeleportToPlaceInstance(game.PlaceId, servers[math.random(1, #servers)], Player)
+        end
+    else
+        TeleportService:Teleport(game.PlaceId, Player)
+    end
+end
+
+
+-- loop หลัก
+task.spawn(function()
+    while true do
+        task.wait(0.5)
+        if not RootPart then
+            local char = Player.Character or Player.CharacterAdded:Wait()
+            setupCharacter(char)
+        end
+
+
+        local fruit = findFruit()
+        if fruit then
+            noFruitTime = 0
+            local pos = getTargetPos(fruit) or fruit.Handle.Position
+            if pos then checkWarpAndMove(pos) end
+        else
+            if currentTween then currentTween:Cancel() currentTween=nil end
+            noFruitTime += 0.5
+            if noFruitTime >= 5 then
+                hopServer()
+            end
+        end
+    end
+end)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-----------
+-----------
+local Players = game:GetService("Players")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local LocalPlayer = Players.LocalPlayer
+
+
+
+
+local function StoreFruit(fruitTool)
+    pcall(function()
+        if fruitTool and fruitTool:IsA("Tool") then
+            local fruitName = fruitTool.Name
+            local shortName = fruitName:match("(%w+)")
+            local remoteName = shortName .. "-" .. shortName
+            local args = {
+                [1] = "StoreFruit",
+                [2] = remoteName,
+                [3] = fruitTool
+            }
+            ReplicatedStorage.Remotes.CommF_:InvokeServer(unpack(args))
+        end
+    end)
+end
+
+
+
+
+local function CheckHeldFruits(char)
+    pcall(function()
+        for _, tool in ipairs(char:GetChildren()) do
+            if tool:IsA("Tool") and tool.Name:find("Fruit") then
+                StoreFruit(tool)
+            end
+        end
+
+
+
+
+        char.ChildAdded:Connect(function(child)
+            pcall(function()
+                if child:IsA("Tool") and child.Name:find("Fruit") then
+                    StoreFruit(child)
+                end
+            end)
+        end)
+    end)
+end
+
+
+
+
+pcall(function()
+    if LocalPlayer.Character then
+        CheckHeldFruits(LocalPlayer.Character)
+    end
+end)
+
+
+
+
+LocalPlayer.CharacterAdded:Connect(function(char)
+    pcall(function()
+        char:WaitForChild("Humanoid")
+        CheckHeldFruits(char)
+    end)
+end)
+
+
+
+
+for _, child in pairs(workspace.Map.CircleIsland:GetChildren()) do
+    if child:FindFirstChild("LavaParts") then
+        child.LavaParts:Destroy()
+    end
+end
