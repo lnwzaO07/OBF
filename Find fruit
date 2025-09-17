@@ -1,2 +1,2 @@
-_G.Team = "Marine"
-loadstring(game:HttpGet("https://raw.githubusercontent.com/lnwzaO07/OBF/refs/heads/main/DDDDDDDDDDDDDD.txt"))()
+_G.Team = "Marine" 
+loadstring(game:HttpGet("https://gist.githubusercontent.com/lnwzaO07/2ca49957aa41c8a9813e7fc59f640af8/raw/0a360ff41551471b01138e0acc4630083609afe0/Find%20fruit"))()
